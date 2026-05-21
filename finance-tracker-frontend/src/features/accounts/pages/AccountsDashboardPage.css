@@ -1,400 +1,454 @@
-/* ========== VARIABLES ========== */
+/* ── Fonts ── */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+
+/* ── Variables ── */
 :root {
-  --primary: #2563eb;
-  --primary-dark: #1d4ed8;
-  --secondary: #64748b;
-  --danger: #ef4444;
-  --success: #10b981;
-  --warning: #f59e0b;
-  --dark: #1e293b;
-  --light: #f8fafc;
-  --gray-100: #f1f5f9;
-  --gray-200: #e2e8f0;
-  --gray-300: #cbd5e1;
-  --gray-400: #94a3b8;
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --radius: 1rem;
-  --radius-sm: 0.5rem;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+
+  --bg: #f4f6fb;
+  --bg-card: #ffffff;
+  --bg-sidebar: #0f1623;
+  --bg-sidebar-hover: #1a2438;
+  --bg-sidebar-active: #1e3a5f;
+
+  --text-primary: #0f1623;
+  --text-secondary: #5a6478;
+  --text-muted: #9aa3b5;
+  --text-sidebar: #c8d0e0;
+  --text-sidebar-active: #ffffff;
+
+  --border: #e5eaf2;
+  --border-card: #eaeff7;
+
+  --accent-blue: #3b82f6;
+  --accent-blue-light: #eff6ff;
+  --accent-green: #10b981;
+  --accent-green-light: #ecfdf5;
+  --accent-orange: #f59e0b;
+  --accent-orange-light: #fffbeb;
+  --accent-purple: #8b5cf6;
+  --accent-purple-light: #f5f3ff;
+
+  --sidebar-width: 240px;
+  --sidebar-collapsed: 68px;
+  --topbar-height: 72px;
+
 }
 
-/* ========== LAYOUT PRINCIPAL ========== */
-.accounts-dashboard {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 2rem 1.5rem;
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: var(--light);
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-body); background: var(--bg); color: var(--text-primary); }
+a { text-decoration: none; color: inherit; }
+
+/* ── App Shell ── */
+.app-shell {
+  display: flex;
   min-height: 100vh;
 }
 
-/* ========== HERO SECTION ========== */
-.dashboard-hero {
+.main-wrapper {
+  margin-left: var(--sidebar-width);
+  flex: 1;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  transition: margin-left var(--transition);
+  min-width: 0;
+}
+
+.sidebar.collapsed ~ .main-wrapper,
+.app-shell:has(.sidebar.collapsed) .main-wrapper {
+  margin-left: var(--sidebar-collapsed);
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  height: var(--topbar-height);
+  display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid var(--gray-200);
+  justify-content: space-between;
+  padding: 0 28px;
+  gap: 16px;
 }
 
-.dashboard-eyebrow {
-  font-size: 0.875rem;
-  font-weight: 500;
+.topbar-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.topbar-eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--primary);
-  margin-bottom: 0.25rem;
+  color: var(--accent-blue);
 }
 
-.dashboard-hero h1 {
-  font-size: 1.875rem;
+.topbar-title {
+  font-size: 20px;
   font-weight: 700;
-  color: var(--dark);
-  margin: 0;
+  color: var(--text-primary);
   line-height: 1.2;
 }
 
-.dashboard-actions {
+.topbar-actions {
   display: flex;
-  gap: 0.75rem;
+  gap: 10px;
+  align-items: center;
 }
 
-.primary-button,
-.secondary-button {
-  padding: 0.6rem 1.25rem;
-  border-radius: 9999px;
-  font-weight: 600;
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
+/* ── Buttons ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 18px;
   border: none;
-  font-family: inherit;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+  white-space: nowrap;
 }
 
-.primary-button {
-  background: var(--primary);
+.btn i { font-size: 17px; }
+
+.btn-primary {
+  background: var(--accent-blue);
   color: white;
-  box-shadow: var(--shadow-sm);
 }
+.btn-primary:hover { background: #2563eb; box-shadow: 0 4px 14px rgba(59,130,246,0.35); transform: translateY(-1px); }
 
-.primary-button:hover {
-  background: var(--primary-dark);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+.btn-secondary {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
 }
+.btn-secondary:hover { background: var(--bg); border-color: var(--accent-blue); color: var(--accent-blue); }
 
-.secondary-button {
-  background: white;
-  color: var(--dark);
-  border: 1px solid var(--gray-300);
-}
-
-.secondary-button:hover {
-  background: var(--gray-100);
-  border-color: var(--gray-400);
-}
-
-/* ========== BALANCE SUMMARY ========== */
-.balance-summary {
-  background: linear-gradient(135deg, var(--dark) 0%, #0f172a 100%);
-  color: white;
-  padding: 1.5rem 2rem;
-  border-radius: var(--radius);
-  margin-bottom: 2rem;
+/* ── Dashboard content ── */
+.dashboard-content {
+  padding: 28px;
   display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 1rem;
-  box-shadow: var(--shadow-lg);
+  flex-direction: column;
+  gap: 24px;
 }
 
-.balance-summary span {
-  font-size: 1rem;
+/* ── Stats row ── */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius);
+  padding: 20px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  box-shadow: var(--shadow);
+  transition: box-shadow var(--transition), transform var(--transition);
+}
+
+.stat-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+
+.stat-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stat-icon i { font-size: 22px; }
+
+.accent-blue .stat-icon { background: var(--accent-blue-light); color: var(--accent-blue); }
+.accent-green .stat-icon { background: var(--accent-green-light); color: var(--accent-green); }
+.accent-orange .stat-icon { background: var(--accent-orange-light); color: var(--accent-orange); }
+.accent-purple .stat-icon { background: var(--accent-purple-light); color: var(--accent-purple); }
+
+.stat-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.stat-label {
+  font-size: 12px;
   font-weight: 500;
-  opacity: 0.8;
+  color: var(--text-muted);
+  letter-spacing: 0.03em;
 }
 
-.balance-summary strong {
-  font-size: 2rem;
+.stat-value {
+  font-size: 20px;
   font-weight: 700;
-  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.balance-summary p {
-  margin: 0;
-  font-size: 0.875rem;
-  opacity: 0.7;
+.stat-sub {
+  font-size: 12px;
+  color: var(--text-secondary);
 }
 
-/* ========== LAYOUT : SIDEBAR + CONTENU ========== */
-.accounts-layout {
-  display: flex;
-  gap: 2rem;
-  flex-wrap: wrap;
+/* ── Content columns ── */
+.content-columns {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 20px;
+  align-items: start;
 }
 
-/* Sidebar stylisée (si le composant Sidebar n'a pas encore sa propre CSS) */
-.sidebar {
-  flex: 1.2;
-  min-width: 260px;
-  background: white;
+/* ── Accounts section ── */
+.accounts-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
   border-radius: var(--radius);
-  box-shadow: var(--shadow-md);
-  padding: 1.5rem;
-  height: fit-content;
-  position: sticky;
-  top: 1rem;
+  padding: 24px;
+  box-shadow: var(--shadow);
 }
 
-/* Contenu principal (grille des comptes) */
-.accounts-grid {
-  flex: 3;
-  min-width: 260px;
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
 }
 
-/* ========== GRILLE DES COMPTES ========== */
+.section-header h2 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-header h2 i {
+  font-size: 18px;
+  color: var(--accent-blue);
+}
+
+.see-all {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-blue);
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  transition: gap var(--transition);
+}
+.see-all:hover { gap: 6px; }
+
 .accounts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 14px;
 }
 
-/* Carte de compte (pour AccountCard) – styles par défaut si besoin */
-.account-card {
-  background: white;
-  border-radius: var(--radius-sm);
-  padding: 1.25rem;
-  box-shadow: var(--shadow-sm);
-  transition: all 0.2s ease;
-  border: 1px solid var(--gray-200);
+/* ── States ── */
+.dashboard-state, .dashboard-error {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 24px;
+  justify-content: center;
+  color: var(--text-secondary);
+  font-size: 15px;
 }
 
-.account-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-  border-color: var(--gray-300);
-}
+.dashboard-state i { font-size: 22px; color: var(--accent-blue); }
+.dashboard-error { color: #ef4444; }
+.dashboard-error i { font-size: 22px; }
 
-/* ========== ÉTATS (CHARGEMENT / ERREUR) ========== */
-.dashboard-state,
-.dashboard-error {
-  text-align: center;
-  padding: 3rem;
-  background: white;
-  border-radius: var(--radius);
-  margin: 2rem 0;
-}
-
-.dashboard-state {
-  color: var(--secondary);
-}
-
-.dashboard-error {
-  color: var(--danger);
-  border-left: 4px solid var(--danger);
-}
-
-/* ========== COMPTE VIDE ========== */
 .empty-accounts {
   text-align: center;
-  padding: 3rem;
-  background: white;
-  border-radius: var(--radius);
-  grid-column: 1 / -1;
+  padding: 48px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
 }
 
-.empty-accounts h2 {
-  font-size: 1.5rem;
-  color: var(--dark);
-  margin-bottom: 0.5rem;
+.empty-accounts i {
+  font-size: 48px;
+  color: var(--text-muted);
+}
+
+.empty-accounts h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
 }
 
 .empty-accounts p {
-  color: var(--secondary);
+  font-size: 14px;
+  color: var(--text-secondary);
+  max-width: 280px;
 }
 
-/* ========== SECTION STATISTIQUES (à ajouter dans le JSX) ========== */
-/* Cette partie stylise les composants que vous pourrez ajouter pour afficher
-   les dépenses par catégorie et la répartition (camembert / barres) */
-
-.expense-stats {
-  background: white;
-  border-radius: var(--radius);
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-  box-shadow: var(--shadow-sm);
-  border: 1px solid var(--gray-200);
-}
-
-.expense-stats h3 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-top: 0;
-  margin-bottom: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--dark);
-}
-
-.expense-stats h3::before {
-  content: "📊";
-  font-size: 1.25rem;
-}
-
-.category-list {
+/* ── Right panel ── */
+.right-panel {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 16px;
+}
+
+.panel-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+
+.panel-empty {
+  font-size: 13px;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 16px 0;
+}
+
+/* ── Category list ── */
+.category-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .category-item {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 6px;
 }
 
-.category-header {
+.category-top {
   display: flex;
-  justify-content: space-between;
-  font-size: 0.875rem;
-  font-weight: 500;
+  align-items: center;
+  gap: 8px;
+}
+
+.category-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
 }
 
 .category-name {
-  color: var(--dark);
-}
-
-.category-amount {
-  color: var(--secondary);
+  flex: 1;
+  font-size: 13px;
   font-weight: 600;
+  color: var(--text-primary);
+  text-transform: capitalize;
 }
 
-.progress-bar-bg {
-  background: var(--gray-200);
-  border-radius: 9999px;
-  height: 0.5rem;
+.category-pct {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+}
+
+.category-bar-bg {
+  height: 6px;
+  background: var(--bg);
+  border-radius: 99px;
   overflow: hidden;
 }
 
-.progress-bar-fill {
-  background: var(--primary);
-  width: 0%;
+.category-bar-fill {
   height: 100%;
-  border-radius: 9999px;
-  transition: width 0.4s ease;
+  border-radius: 99px;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Graphique circulaire (camembert) – version simplifiée en CSS pur */
-.pie-chart-placeholder {
+.category-meta {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 1.5rem 0;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
 }
 
-.simple-pie {
-  width: 160px;
-  height: 160px;
-  border-radius: 50%;
-  background: conic-gradient(
-    var(--primary) 0% 30%,
-    var(--success) 30% 55%,
-    var(--warning) 55% 75%,
-    var(--danger) 75% 90%,
-    var(--secondary) 90% 100%
-  );
-  margin-bottom: 1rem;
-  box-shadow: var(--shadow-sm);
-}
+/* ── Quick actions ── */
+.quick-actions .section-header { margin-bottom: 12px; }
 
-.pie-legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  justify-content: center;
-}
-
-.legend-color {
-  display: inline-block;
-  width: 12px;
-  height: 12px;
-  border-radius: 2px;
-  margin-right: 0.4rem;
-}
-
-.legend-item {
-  font-size: 0.75rem;
+.quick-action-btn {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
-  color: var(--dark);
-}
-
-/* Répartition en cartes (stats rapides) */
-.stats-cards {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin: 1.5rem 0;
-}
-
-.stat-card {
-  background: var(--gray-100);
+  gap: 12px;
+  padding: 11px 12px;
   border-radius: var(--radius-sm);
-  padding: 1rem;
-  flex: 1 1 120px;
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 500;
+  transition: background var(--transition), color var(--transition);
+  margin: 0 -4px;
+}
+
+.quick-action-btn i:first-child {
+  font-size: 20px;
+  color: var(--accent-blue);
+  width: 24px;
   text-align: center;
 }
 
-.stat-card .stat-label {
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  color: var(--secondary);
+.quick-action-btn span { flex: 1; }
+
+.quick-action-btn .arrow {
+  font-size: 18px;
+  color: var(--text-muted);
+  transition: transform var(--transition), color var(--transition);
 }
 
-.stat-card .stat-value {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--dark);
+.quick-action-btn:hover {
+  background: var(--bg);
+  color: var(--accent-blue);
 }
 
-/* ========== RESPONSIVE ========== */
+.quick-action-btn:hover .arrow {
+  transform: translateX(3px);
+  color: var(--accent-blue);
+}
+
+@media (max-width: 1200px) {
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+  .content-columns { grid-template-columns: 1fr; }
+  .right-panel { display: grid; grid-template-columns: 1fr 1fr; }
+}
+
 @media (max-width: 768px) {
-  .accounts-dashboard {
-    padding: 1rem;
-  }
+  .sidebar { width: var(--sidebar-collapsed); }
+  .sidebar .sidebar-brand span,
+  .sidebar .nav-item span { opacity: 0; width: 0; }
+  .main-wrapper { margin-left: var(--sidebar-collapsed); }
+  .stats-row { grid-template-columns: 1fr 1fr; }
+  .topbar { padding: 0 16px; }
+  .topbar-actions .btn span { display: none; }
+  .dashboard-content { padding: 16px; }
+  .right-panel { grid-template-columns: 1fr; }
+}
 
-  .dashboard-hero {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .balance-summary {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .accounts-layout {
-    flex-direction: column;
-  }
-
-  .sidebar {
-    position: static;
-    width: 100%;
-  }
-
-  .accounts-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .simple-pie {
-    width: 120px;
-    height: 120px;
-  }
+@media (max-width: 480px) {
+  .stats-row { grid-template-columns: 1fr; }
+  .topbar-title { font-size: 17px; }
 }
