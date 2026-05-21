@@ -70,42 +70,13 @@ export default function AccountsDashboardPage() {
       <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
 
       <div className="app-shell">
-        <aside className={`sidebar ${sidebarOpen ? 'open' : 'collapsed'}`}>
-          <div className="sidebar-header">
-            <div className="sidebar-brand">
-              <i className="bx bxs-bank" />
-              {sidebarOpen && <span>FinBoard</span>}
-            </div>
-            <button className="sidebar-toggle" onClick={() => setSidebarOpen(!sidebarOpen)}>
-              <i className={`bx ${sidebarOpen ? 'bx-chevron-left' : 'bx-chevron-right'}`} />
-            </button>
-          </div>
-
-          <nav className="sidebar-nav">
-            {navItems.map((item) => (
-              <a
-                key={item.key}
-                href={item.href}
-                className={`nav-item ${activePage === item.key ? 'active' : ''}`}
-                onClick={() => setActivePage(item.key)}
-              >
-                <i className={`bx ${item.icon}`} />
-                {sidebarOpen && <span>{item.label}</span>}
-              </a>
-            ))}
-          </nav>
-
-          <div className="sidebar-footer">
-            <a href="/dashboard/create" className="nav-item new-account-link">
-              <i className="bx bx-plus-circle" />
-              {sidebarOpen && <span>Nouveau compte</span>}
-            </a>
-            <a href="/settings" className="nav-item">
-              <i className="bx bx-cog" />
-              {sidebarOpen && <span>Paramètres</span>}
-            </a>
-          </div>
-        </aside>
+        <Sidebar
+          navItems={navItems}
+          sidebarOpen={sidebarOpen}
+          setSidebarOpen={setSidebarOpen}
+          activePage={activePage}
+          setActivePage={setActivePage}
+        />
 
         {/* Main area */}
         <div className="main-wrapper">
