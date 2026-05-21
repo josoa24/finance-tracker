@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import type { FormEvent } from 'react'
 import type { Account, TransferMoneyPayload } from '../types'
 import { formatCurrency } from '../utils'
-
+import './transfert-money.css'
 type TransferMoneyModalProps = {
   accounts: Account[]
   onCancel: () => void
@@ -27,85 +27,140 @@ function TransferMoneyModal({ accounts, onCancel, onSubmit }: TransferMoneyModal
 
     const numericAmount = Number(amount)
     if (sourceAccountId === targetAccountId) {
-      setError('Selectionnez deux comptes differents.')
+      setError('Sélectionnez deux comptes différents.')
       return
     }
-
     if (!numericAmount || numericAmount <= 0) {
-      setError('Le montant doit etre superieur a 0.')
+      setError('Le montant doit être supérieur à 0.')
       return
     }
 
     setIsSubmitting(true)
     try {
-      await onSubmit({
-        sourceAccountId,
-        targetAccountId,
-        amount: numericAmount,
-      })
+      await onSubmit({ sourceAccountId, targetAccountId, amount: numericAmount })
     } catch {
-      setError('Impossible de realiser le virement pour le moment.')
+      setError('Impossible de réaliser le virement pour le moment.')
     } finally {
       setIsSubmitting(false)
     }
   }
 
   return (
-    <form className="account-form" onSubmit={handleSubmit}>
-      <label>
-        Depuis
-        <select
-          value={sourceAccountId}
-          onChange={(event) => setSourceAccountId(Number(event.target.value))}
-        >
-          {accounts.map((account) => (
-            <option key={account.id} value={account.id}>
-              {account.name} - {formatCurrency(account.balance, account.currency)}
-            </option>
-          ))}
-        </select>
-      </label>
+    <section className="create-account-page">
+      <div className="form-card">
+                <div>
+                  <p className="form-card-title">Détails du virement</p>
+                  <p className="form-card-subtitle">
+                    Sélectionnez les comptes et renseignez le montant à transférer.
+                  </p>
+                </div>
 
-      <label>
-        Vers
-        <select
-          value={targetAccountId}
-          onChange={(event) => setTargetAccountId(Number(event.target.value))}
-        >
-          {accounts.map((account) => (
-            <option key={account.id} value={account.id}>
-              {account.name}
-            </option>
-          ))}
-        </select>
-      </label>
+                <form onSubmit={handleSubmit}>
+                  <div className="form-grid">
 
-      <label>
-        Montant
-        <input
-          type="number"
-          min="0"
-          step="0.01"
-          value={amount}
-          onChange={(event) => setAmount(event.target.value)}
-          placeholder="0.00"
-        />
-      </label>
+                    {/* Depuis */}
+                    <div className="form-field">
+                      <label className="form-label" htmlFor="source-account">
+                        Depuis
+                      </label>
+                      <select
+                        id="source-account"
+                        className="form-select"
+                        value={sourceAccountId}
+                        onChange={(e) => setSourceAccountId(Number(e.target.value))}
+                      >
+                        {accounts.map((account) => (
+                          <option key={account.id} value={account.id}>
+                            {account.name} — {formatCurrency(account.balance, account.currency)}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
 
-      {sourceAccount && (
-        <p className="transfer-hint">Solde disponible : {formatCurrency(sourceAccount.balance, sourceAccount.currency)}</p>
-      )}
-      {error && <p className="account-form-error">{error}</p>}
+                    {/* Vers */}
+                    <div className="form-field">
+                      <label className="form-label" htmlFor="target-account">
+                        Vers
+                      </label>
+                      <select
+                        id="target-account"
+                        className="form-select"
+                        value={targetAccountId}
+                        onChange={(e) => setTargetAccountId(Number(e.target.value))}
+                      >
+                        {accounts.map((account) => (
+                          <option key={account.id} value={account.id}>
+                            {account.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
 
-      <div className="modal-actions">
-        <button type="button" className="secondary-button" onClick={onCancel}>
-          Annuler
-        </button>
-        <button type="submit" className="primary-button" disabled={isSubmitting || accounts.length < 2}>
-          {isSubmitting ? 'Virement...' : 'Valider le virement'}
-        </button>
-      </div>
-    </form>
+                    {/* Montant */}
+                    <div className="form-field span-2">
+                      <label className="form-label" htmlFor="transfer-amount">
+                        Montant
+                      </label>
+                      <input
+                        id="transfer-amount"
+                        className="form-input"
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        value={amount}
+                        onChange={(e) => setAmount(e.target.value)}
+                        placeholder="0.00"
+                      />
+                      {sourceAccount && (
+                        <p className="transfer-hint">
+                          <i className="bx bx-info-circle" />
+                          Solde disponible&nbsp;:{' '}
+                          <strong>{formatCurrency(sourceAccount.balance, sourceAccount.currency)}</strong>
+                        </p>
+                      )}
+                    </div>
+
+                  </div>
+
+                  {/* Erreur inline */}
+                  {error && (
+                    <p className="dashboard-error" style={{ marginTop: '16px' }}>
+                      <i className="bx bx-error-circle" />
+                      {error}
+                    </p>
+                  )}
+
+                  {/* Actions */}
+                  <div className="form-actions">
+                    <button
+                      type="button"
+                      className="secondary-button"
+                      onClick={onCancel}
+                      disabled={isSubmitting}
+                    >
+                      Annuler
+                    </button>
+                    <button
+                      type="submit"
+                      className="primary-button"
+                      disabled={isSubmitting || accounts.length < 2}
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <i className="bx bx-loader-alt bx-spin" />
+                          Virement...
+                        </>
+                      ) : (
+                        <>
+                          <i className="bx bx-transfer" />
+                          Valider le virement
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </section>
   )
 }
 

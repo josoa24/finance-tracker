@@ -32,5 +32,6 @@ build/
 ### VS Code ###
 .vscode/
 finance-tracker-backend/src/main/resources/application.properties
-finance-tracker-backend/src/main/resources/application.properties
 finance-tracker-frontend/src/url.tsx
+finance-tracker-frontend/src/url.tsx
+finance-tracker-backend/src/main/resources/application.properties

@@ -1,0 +1,22 @@
+/* ─────────────────────────────────────────
+   Transfer hint (solde disponible)
+───────────────────────────────────────── */
+.transfer-hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 8px 0 0 0;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.transfer-hint i {
+  font-size: 15px;
+  color: var(--accent-blue);
+  flex-shrink: 0;
+}
+
+.transfer-hint strong {
+  color: var(--text-secondary);
+  font-weight: 600;
+}

@@ -44,22 +44,17 @@ function CreateAccountForm({ onCancel, onSubmit }: CreateAccountFormProps) {
       } catch {
       }
     }
-
     fetchMetadata()
-    return () => {
-      mounted = false
-    }
+    return () => { mounted = false }
   }, [])
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setError('')
-
     if (!name.trim()) {
       setError('Le nom du compte est obligatoire.')
       return
     }
-
     setIsSubmitting(true)
     try {
       await onSubmit({
@@ -69,67 +64,133 @@ function CreateAccountForm({ onCancel, onSubmit }: CreateAccountFormProps) {
         ...(currencyId ? { currencyId } : {}),
       })
     } catch {
-      setError('Impossible de creer le compte pour le moment.')
+      setError('Impossible de créer le compte pour le moment.')
     } finally {
       setIsSubmitting(false)
     }
   }
 
   return (
-    <form className="account-form" onSubmit={handleSubmit}>
-      <label>
-        Nom du compte
-        <input
-          value={name}
-          onChange={(event) => setName(event.target.value)}
-          placeholder="Compte principal"
-        />
-      </label>
-
-      <label>
-        Type
-        <select value={type} onChange={(event) => setType(event.target.value as AccountType)}>
-          {accountTypes.map((t) => (
-            <option key={t} value={t}>
-              {accountTypeLabels[t] ?? t}
-            </option>
-          ))}
-        </select>
-      </label>
-
-      <label>
-        Devise
-        <select value={currencyId ?? ''} onChange={(event) => setCurrencyId(Number(event.target.value))}>
-          {currencies.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.symbol} ({c.code})
-            </option>
-          ))}
-        </select>
-      </label>
-
-      <label>
-        Solde initial
-        <input
-          type="number"
-          min="0"
-          step="0.01"
-          value={initialBalance}
-          onChange={(event) => setInitialBalance(event.target.value)}
-        />
-      </label>
-
-      {error && <p className="account-form-error">{error}</p>}
-
-      <div className="modal-actions">
-        <button type="button" className="secondary-button" onClick={onCancel}>
-          Annuler
-        </button>
-        <button type="submit" className="primary-button" disabled={isSubmitting}>
-          {isSubmitting ? 'Creation...' : 'Creer le compte'}
-        </button>
+    <div className="form-card">
+      <div>
+        <p className="form-card-title">Informations du compte</p>
+        <p className="form-card-subtitle">
+          Renseignez les détails pour créer votre nouveau compte.
+        </p>
       </div>
-    </form>
+
+      <form onSubmit={handleSubmit}>
+        <div className="form-grid">
+
+          {/* Nom */}
+          <div className="form-field span-2">
+            <label className="form-label" htmlFor="account-name">
+              Nom du compte
+            </label>
+            <input
+              id="account-name"
+              className="form-input"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Compte principal"
+              autoComplete="off"
+            />
+          </div>
+
+          {/* Type */}
+          <div className="form-field">
+            <label className="form-label" htmlFor="account-type">
+              Type
+            </label>
+            <select
+              id="account-type"
+              className="form-select"
+              value={type}
+              onChange={(e) => setType(e.target.value as AccountType)}
+            >
+              {accountTypes.map((t) => (
+                <option key={t} value={t}>
+                  {accountTypeLabels[t] ?? t}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Devise */}
+          <div className="form-field">
+            <label className="form-label" htmlFor="account-currency">
+              Devise
+            </label>
+            <select
+              id="account-currency"
+              className="form-select"
+              value={currencyId ?? ''}
+              onChange={(e) => setCurrencyId(Number(e.target.value))}
+            >
+              {currencies.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.symbol} ({c.code})
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Solde initial */}
+          <div className="form-field span-2">
+            <label className="form-label" htmlFor="account-balance">
+              Solde initial
+            </label>
+            <input
+              id="account-balance"
+              className="form-input"
+              type="number"
+              min="0"
+              step="0.01"
+              value={initialBalance}
+              onChange={(e) => setInitialBalance(e.target.value)}
+            />
+          </div>
+
+        </div>
+
+        {/* Erreur inline */}
+        {error && (
+          <p className="dashboard-error" style={{ marginTop: '16px' }}>
+            <i className="bx bx-error-circle" />
+            {error}
+          </p>
+        )}
+
+        {/* Actions */}
+        <div className="form-actions">
+          <button
+            type="button"
+            className="secondary-button"
+            onClick={onCancel}
+            disabled={isSubmitting}
+          >
+            Annuler
+          </button>
+          <button
+            type="submit"
+            className="primary-button"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <>
+                <i className="bx bx-loader-alt bx-spin" />
+                Création...
+              </>
+            ) : (
+              <>
+                <i className="bx bx-plus" />
+                Créer le compte
+              </>
+            )}
+          </button>
+        </div>
+      </form>
+    </div>
   )
 }
 
