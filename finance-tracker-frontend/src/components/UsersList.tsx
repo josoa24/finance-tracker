@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import "../styles/UsersList.css";
-import { url } from "../url";
+import { API_URL } from "../url";
 
 interface User {
   id: number;
@@ -16,7 +16,7 @@ export default function UsersList() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get<User[]>(url + "/api/users");
+        const response = await axios.get<User[]>(API_URL + "/api/users");
         setUsers(response.data);
         setLoading(false);
       } catch (err) {

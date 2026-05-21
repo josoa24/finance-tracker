@@ -1,0 +1,18 @@
+spring.application.name=finance-tracker
+
+# Configuration explicite du Driver et du Dialecte
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+
+# Séparation stricte des composants de la base de données
+spring.datasource.url=${DB_URL}
+spring.datasource.username=${DB_USER}
+spring.datasource.password=${DB_PASSWORD}
+
+# Stratégie de base de données
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+
+# Optimisation des connexions
+spring.datasource.tomcat.max-active=2
+spring.datasource.hikari.keepaliveTime=30000
