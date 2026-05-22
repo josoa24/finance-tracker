@@ -13,6 +13,8 @@ export type Account = {
   balance: number
   createdAt: string
   currency: Currency
+  hasTransactions?: boolean
+  active?: boolean
 }
 
 export type CreateAccountPayload = {

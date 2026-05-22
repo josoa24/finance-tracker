@@ -1,10 +1,10 @@
 package com.finance.finance_tracker.account.controllers;
 
-import com.finance.finance_tracker.account.dto.AccountDTO;
+import com.finance.finance_tracker.account.dtos.AccountDTO;
 import com.finance.finance_tracker.account.services.queries.GetAllAccountsQueryHandler;
 import com.finance.finance_tracker.account.services.queries.GetAccountMetadataQueryHandler;
 import com.finance.finance_tracker.account.services.queries.GetAccountByIdQueryHandler;
-import com.finance.finance_tracker.account.dto.AccountMetadataDTO;
+import com.finance.finance_tracker.account.dtos.AccountMetadataDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;

@@ -1,8 +1,8 @@
 package com.finance.finance_tracker.account.services.commands;
 
 import com.finance.finance_tracker.account.models.Account;
-import com.finance.finance_tracker.account.repository.AccountRepository;
-import com.finance.finance_tracker.account.repository.AccountType;
+import com.finance.finance_tracker.account.repositories.AccountRepository;
+import com.finance.finance_tracker.account.repositories.AccountType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,9 +25,14 @@ class TransferMoneyCommandHandlerTest {
 
     @Test
     void should_transfer_money_successfully_when_solde_is_sufficient() {
-        Account source = new Account("Compte Courant", AccountType.CHECKING, 500.0);
+        com.finance.finance_tracker.account.models.Currency currency = new com.finance.finance_tracker.account.models.Currency();
+        currency.setId(1L);
+        currency.setCode("EUR");
+        currency.setSymbol("€");
+
+        Account source = new Account("Compte Courant", AccountType.CHECKING, Double.valueOf(500.0), currency);
         source.setId(1L);
-        Account target = new Account("Épargne", AccountType.SAVINGS, 200.0);
+        Account target = new Account("Épargne", AccountType.SAVINGS, Double.valueOf(200.0), currency);
         target.setId(2L);
 
         TransferMoneyCommand command = new TransferMoneyCommand(1L, 2L, 150.0);
@@ -45,9 +50,14 @@ class TransferMoneyCommandHandlerTest {
 
     @Test
     void should_throw_exception_when_source_account_has_insufficient_balance() {
-        Account source = new Account("Compte Courant", AccountType.CHECKING, 50.0);
+        com.finance.finance_tracker.account.models.Currency currency = new com.finance.finance_tracker.account.models.Currency();
+        currency.setId(1L);
+        currency.setCode("EUR");
+        currency.setSymbol("€");
+
+        Account source = new Account("Compte Courant", AccountType.CHECKING, Double.valueOf(50.0), currency);
         source.setId(1L);
-        Account target = new Account("Épargne", AccountType.SAVINGS, 200.0);
+        Account target = new Account("Épargne", AccountType.SAVINGS, Double.valueOf(200.0), currency);
         target.setId(2L);
 
         TransferMoneyCommand command = new TransferMoneyCommand(1L, 2L, 100.0);
