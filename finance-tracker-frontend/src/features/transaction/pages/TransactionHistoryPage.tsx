@@ -5,6 +5,7 @@ import Sidebar from '../../../layout/Sidebar'
 import { navItems } from '../../../config/navigationItems'
 import TransactionList from '../components/TransactionList'
 import type { Account } from '../../accounts/types'
+import './transaction-history.css'
 
 export default function TransactionHistoryPage() {
   const [accounts, setAccounts] = useState<Account[]>([])
@@ -15,79 +16,70 @@ export default function TransactionHistoryPage() {
   const [activePage, setActivePage] = useState('history')
   const [selectedAccount, setSelectedAccount] = useState<number | 'all'>('all')
 
+  const enrichAndSort = (txResults: any[], accountsList: Account[]) => {
+    const allTxs = txResults.flatMap((r, i) => {
+      const account = accountsList[i]
+      return (r.data || []).map((tx: any) => ({
+        ...tx,
+        accountId: account.id,
+        accountName: account.name,
+        accountCurrency: account.currency,
+      }))
+    })
+    allTxs.sort((a, b) => new Date(b.transactionDate).getTime() - new Date(a.transactionDate).getTime())
+    return allTxs
+  }
+
   useEffect(() => {
     const fetchAll = async () => {
       setIsLoading(true)
       try {
         const accRes = await axios.get<Account[]>(`${API_URL}/api/accounts`)
         setAccounts(accRes.data)
-
-        // if selecting all, fetch for each account and aggregate
-        const txPromises = accRes.data.map((a) => axios.get(`${API_URL}/api/transactions/account/${a.id}`))
-        const txResults = await Promise.all(txPromises)
-        const allTxs = txResults.flatMap((r, i) => {
-          const account = accRes.data[i]
-          return (r.data || []).map((tx: any) => ({
-            ...tx,
-            accountId: account.id,
-            accountName: account.name,
-            accountCurrency: account.currency,
-          }))
-        })
-
-        // sort by date desc
-        allTxs.sort((a: any, b: any) => new Date(b.transactionDate).getTime() - new Date(a.transactionDate).getTime())
-
-        setTransactions(allTxs)
-      } catch (e: any) {
-        setError('Impossible de charger l\'historique des transactions.')
+        const txResults = await Promise.all(
+          accRes.data.map((a) => axios.get(`${API_URL}/api/transactions/account/${a.id}`))
+        )
+        setTransactions(enrichAndSort(txResults, accRes.data))
+      } catch {
+        setError("Impossible de charger l'historique des transactions.")
       } finally {
         setIsLoading(false)
       }
     }
-
     fetchAll()
   }, [])
 
   const handleAccountChange = async (value: string) => {
-    if (value === 'all') {
-      setSelectedAccount('all')
-      // reload all (we already have them, but refetch for simplicity)
-      setIsLoading(true)
-      try {
-        const txPromises = accounts.map((a) => axios.get(`${API_URL}/api/transactions/account/${a.id}`))
-        const txResults = await Promise.all(txPromises)
-        const allTxs = txResults.flatMap((r, i) => {
-          const accName = accounts[i].name
-          return (r.data || []).map((tx: any) => ({ ...tx, accountId: accounts[i].id, accountName: accName }))
-        })
-        allTxs.sort((a: any, b: any) => new Date(b.transactionDate).getTime() - new Date(a.transactionDate).getTime())
-        setTransactions(allTxs)
-      } catch (e) {
-        setError('Impossible de charger les transactions.')
-      } finally {
-        setIsLoading(false)
-      }
-    } else {
-      const accId = Number(value)
-      setSelectedAccount(accId)
-      setIsLoading(true)
-      try {
+    setError('')
+    setIsLoading(true)
+    try {
+      if (value === 'all') {
+        setSelectedAccount('all')
+        const txResults = await Promise.all(
+          accounts.map((a) => axios.get(`${API_URL}/api/transactions/account/${a.id}`))
+        )
+        setTransactions(enrichAndSort(txResults, accounts))
+      } else {
+        const accId = Number(value)
+        setSelectedAccount(accId)
         const res = await axios.get(`${API_URL}/api/transactions/account/${accId}`)
         const account = accounts.find((a) => a.id === accId)
-        const txs = (res.data || []).map((tx: any) => ({
-          ...tx,
-          accountId: accId,
-          accountName: account?.name,
-          accountCurrency: account?.currency,
-        }))
-        txs.sort((a: any, b: any) => new Date(b.transactionDate).getTime() - new Date(a.transactionDate).getTime())
+        const txs = (res.data || [])
+          .map((tx: any) => ({
+            ...tx,
+            accountId: accId,
+            accountName: account?.name,
+            accountCurrency: account?.currency,
+          }))
+          .sort((a: any, b: any) =>
+            new Date(b.transactionDate).getTime() - new Date(a.transactionDate).getTime()
+          )
         setTransactions(txs)
-      } catch (e) {
-        setError('Impossible de charger les transactions pour ce compte.')
-      } finally {
-        setIsLoading(false)
       }
+    } catch {
+      setError('Impossible de charger les transactions.')
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -101,7 +93,6 @@ export default function TransactionHistoryPage() {
           setSidebarOpen={setSidebarOpen}
           activePage={activePage}
           setActivePage={setActivePage}
-          accountId={selectedAccount === 'all' ? null : (selectedAccount as number)}
         />
 
         <div className="main-wrapper">
@@ -111,26 +102,31 @@ export default function TransactionHistoryPage() {
                 <p className="dashboard-eyebrow">Historique</p>
                 <h1>Historique des transactions</h1>
               </div>
-            </section>
-
-            <div className="history-controls">
-              <label>
-                Filtrer par compte
-                <select value={selectedAccount === 'all' ? 'all' : String(selectedAccount)} onChange={(e) => handleAccountChange(e.target.value)}>
+              <div className="history-filter">
+                <label htmlFor="account-filter">Filtrer par compte</label>
+                <select
+                  id="account-filter"
+                  value={selectedAccount === 'all' ? 'all' : String(selectedAccount)}
+                  onChange={(e) => handleAccountChange(e.target.value)}
+                >
                   <option value="all">Tous les comptes</option>
                   {accounts.map((a) => (
                     <option key={a.id} value={a.id}>{a.name}</option>
                   ))}
                 </select>
-              </label>
-            </div>
+              </div>
+            </section>
 
-            {isLoading && <p className="dashboard-state">Chargement des transactions...</p>}
+            {isLoading && <p className="dashboard-state">Chargement des transactions…</p>}
             {error && <p className="dashboard-error">{error}</p>}
 
             {!isLoading && !error && (
               transactions.length === 0 ? (
-                <p className="empty-state">Aucune transaction trouvée.</p>
+                <div className="empty-accounts">
+                  <i className="bx bx-transfer" />
+                  <h3>Aucune transaction trouvée</h3>
+                  <p>Les transactions apparaîtront ici après leur création.</p>
+                </div>
               ) : (
                 <TransactionList transactions={transactions} />
               )

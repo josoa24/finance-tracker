@@ -50,7 +50,7 @@ function App() {
 
   return (
     <>
-      {currentPath === '/' && <PresentationPage />}
+      {currentPath === '/' && !localStorage.getItem('presentation_seen') && <PresentationPage />}
       {currentPath === '/login' && <LoginPage />}
       {currentPath === '/register' && <RegisterPage />}
       {isAuthenticated && currentPath === '/dashboard' && <AccountsDashboardPage />}
