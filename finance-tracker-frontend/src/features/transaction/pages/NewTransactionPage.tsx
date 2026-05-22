@@ -99,7 +99,7 @@ export default function NewTransactionPage() {
         note: note || null,
       }
 
-      const res = await axios.post(`${API_URL}/api/transactions`, payload)
+      await axios.post(`${API_URL}/api/transactions`, payload)
 
       // update account balance locally
       setAccounts((prev) => prev.map((a) => (a.id === accountId ? { ...a, balance: previewBalance } : a)))

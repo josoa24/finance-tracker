@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { API_URL } from "../../../url";
 import type { Account } from "../types";
 
