@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { authService } from '../../../utils/authService'
-import '../auth.css'
+import './login.css'
 
 export function RegisterPage() {
   const [username, setUsername] = useState('')
@@ -12,77 +12,111 @@ export function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
-
     if (password !== confirmPassword) {
-      setError('Passwords do not match')
+      setError('Les mots de passe ne correspondent pas.')
       return
     }
-
     if (password.length < 6) {
-      setError('Password must be at least 6 characters long')
+      setError('Le mot de passe doit contenir au moins 6 caractères.')
       return
     }
-
     setLoading(true)
     try {
       await authService.register(username, password)
       window.location.href = '/dashboard'
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Registration failed. Username may already exist.')
+      setError(err.response?.data?.message || "Échec de l'inscription. Ce nom d'utilisateur existe peut-être déjà.")
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className="auth-container">
-      <div className="auth-box">
-        <h1>Finance Tracker</h1>
-        <h2>Register</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="username">Username</label>
-            <input
-              id="username"
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="Choose a username"
-              required
-            />
+    <>
+      <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+      <div className="login-shell">
+        <div className="login-card">
+          <div className="login-brand">
+            <i className="bx bxs-bank" />
+            <span>FinBoard</span>
           </div>
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter a password (min 6 chars)"
-              required
-            />
+
+          <div className="login-header">
+            <h1>Créer un compte</h1>
+            <p>Remplissez les champs ci-dessous pour vous inscrire.</p>
           </div>
-          <div className="form-group">
-            <label htmlFor="confirmPassword">Confirm Password</label>
-            <input
-              id="confirmPassword"
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="Confirm your password"
-              required
-            />
-          </div>
-          {error && <div className="error-message">{error}</div>}
-          <button type="submit" disabled={loading}>
-            {loading ? 'Registering...' : 'Register'}
-          </button>
-        </form>
-        <p className="auth-switch">
-          Already have an account?{' '}
-          <a href="/login">Login here</a>
-        </p>
+
+          <form className="login-form" onSubmit={handleSubmit}>
+            <div className="login-field">
+              <label htmlFor="username">Nom d'utilisateur</label>
+              <div className="login-input-wrap">
+                <i className="bx bx-user" />
+                <input
+                  id="username"
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="Choisissez un identifiant"
+                  required
+                  autoComplete="username"
+                />
+              </div>
+            </div>
+
+            <div className="login-field">
+              <label htmlFor="password">Mot de passe</label>
+              <div className="login-input-wrap">
+                <i className="bx bx-lock-alt" />
+                <input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Minimum 6 caractères"
+                  required
+                  autoComplete="new-password"
+                />
+              </div>
+            </div>
+
+            <div className="login-field">
+              <label htmlFor="confirmPassword">Confirmer le mot de passe</label>
+              <div className="login-input-wrap">
+                <i className="bx bx-lock-open-alt" />
+                <input
+                  id="confirmPassword"
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="Répétez votre mot de passe"
+                  required
+                  autoComplete="new-password"
+                />
+              </div>
+            </div>
+
+            {error && (
+              <div className="login-error">
+                <i className="bx bx-error-circle" />
+                {error}
+              </div>
+            )}
+
+            <button type="submit" className="btn-login" disabled={loading}>
+              {loading ? (
+                <><i className="bx bx-loader-alt bx-spin" /> Inscription…</>
+              ) : (
+                "S'inscrire"
+              )}
+            </button>
+          </form>
+
+          <p className="login-switch">
+            Déjà un compte ?{' '}
+            <a href="/login">Se connecter</a>
+          </p>
+        </div>
       </div>
-    </div>
+    </>
   )
 }

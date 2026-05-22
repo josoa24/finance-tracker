@@ -1,0 +1,125 @@
+.accounts-table-wrapper {
+  background: var(--bg-card, #ffffff);
+  border: 0.5px solid var(--border-color, rgba(0,0,0,0.1));
+  border-radius: var(--radius-lg, 12px);
+  overflow: hidden;
+}
+
+.accounts-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  table-layout: fixed;
+}
+
+.accounts-table thead th {
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: var(--bg-thead, rgba(0,0,0,0.03));
+  border-bottom: 0.5px solid var(--border-color, rgba(0,0,0,0.1));
+  white-space: nowrap;
+}
+
+.accounts-table .col-name     { width: 30%; }
+.accounts-table .col-type     { width: 20%; }
+.accounts-table .col-balance  { width: 22%; }
+.accounts-table .col-currency { width: 12%; }
+.accounts-table .col-action   { width: 16%; }
+
+.accounts-table thead th:last-child,
+.accounts-table td:last-child {
+  text-align: right;
+}
+
+.account-row td {
+  padding: 13px 16px;
+  vertical-align: middle;
+  border-bottom: 0.5px solid var(--border-color, rgba(0,0,0,0.08));
+  color: var(--text-primary);
+}
+
+.account-row:last-child td {
+  border-bottom: none;
+}
+
+.account-row:hover td {
+  background: var(--bg-row-hover, rgba(0,0,0,0.02));
+}
+
+.account-name {
+  font-weight: 500;
+}
+
+.account-balance {
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.account-currency {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.account-type-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.account-type-badge--courant {
+  background: #E6F1FB;
+  color: #0C447C;
+}
+
+.account-type-badge--epargne {
+  background: #EAF3DE;
+  color: #27500A;
+}
+
+.account-type-badge--investissement {
+  background: #EEEDFE;
+  color: #3C3489;
+}
+
+.btn-row-delete {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border: 0.5px solid rgba(0,0,0,0.15);
+  border-radius: 6px;
+  background: transparent;
+  color: #A32D2D;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+
+.btn-row-delete:hover:not(:disabled) {
+  background: #FCEBEB;
+  border-color: #F09595;
+}
+
+.btn-row-delete--disabled,
+.btn-row-delete:disabled {
+  color: var(--text-muted);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.account-row-error td {
+  padding: 4px 16px 10px;
+  border-bottom: 0.5px solid var(--border-color, rgba(0,0,0,0.08));
+}
+
+.row-error-message {
+  margin: 0;
+  font-size: 13px;
+  color: #A32D2D;
+}

@@ -1,0 +1,218 @@
+.analytics-controls {
+    display: flex;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 1.5rem;
+    padding: 16px;
+    background: var(--bg-card, #ffffff);
+    border: 0.5px solid var(--border-color, rgba(0, 0, 0, 0.1));
+    border-radius: var(--radius-lg, 12px);
+}
+
+.analytics-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.analytics-field label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+.analytics-field input,
+.analytics-field select {
+    padding: 7px 10px;
+    border: 0.5px solid rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    font-size: 14px;
+    color: var(--text-primary);
+    background: var(--bg-card, #ffffff);
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.analytics-field input:focus,
+.analytics-field select:focus {
+    border-color: #378ADD;
+    box-shadow: 0 0 0 3px rgba(55, 138, 221, 0.15);
+}
+
+.analytics-mode-toggle {
+    display: flex;
+    gap: 4px;
+    padding: 3px;
+    background: var(--bg-thead, rgba(0, 0, 0, 0.04));
+    border-radius: 8px;
+    align-self: flex-end;
+}
+
+.mode-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.mode-btn i {
+    font-size: 16px;
+}
+
+.mode-btn--active {
+    background: var(--bg-card, #ffffff);
+    color: var(--text-primary);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.analytics-body {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.stat-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+}
+
+.stat-card {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 14px 16px;
+    background: var(--bg-card, #ffffff);
+    border: 0.5px solid var(--border-color, rgba(0, 0, 0, 0.1));
+    border-radius: var(--radius-lg, 12px);
+}
+
+.stat-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+.stat-value {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
+}
+
+.stat-sub {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.analytics-charts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+.chart-card {
+    background: var(--bg-card, #ffffff);
+    border: 0.5px solid var(--border-color, rgba(0, 0, 0, 0.1));
+    border-radius: var(--radius-lg, 12px);
+    padding: 16px 20px;
+}
+
+.chart-card--full {
+    width: 100%;
+}
+
+.chart-card h3 {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin: 0 0 16px;
+}
+
+.chart-tooltip {
+    background: var(--bg-card, #ffffff);
+    border: 0.5px solid var(--border-color, rgba(0, 0, 0, 0.12));
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 13px;
+}
+
+.chart-tooltip-label {
+    font-weight: 500;
+    margin: 0 0 4px;
+    color: var(--text-primary);
+}
+
+.category-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.cat-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.cat-row-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+.cat-row-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.cat-row-amounts {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+}
+
+.cat-row-spent {
+    font-weight: 500;
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
+}
+
+.cat-row-limit {
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+}
+
+.cat-row-over {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: #FCEBEB;
+    color: #A32D2D;
+}
+
+.cat-progress-track {
+    height: 6px;
+    background: rgba(0, 0, 0, 0.07);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.cat-progress-fill {
+    height: 100%;
+    border-radius: 6px;
+    transition: width 0.4s ease;
+}
