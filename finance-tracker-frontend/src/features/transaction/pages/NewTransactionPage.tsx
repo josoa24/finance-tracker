@@ -31,6 +31,7 @@ export default function NewTransactionPage() {
   const [note, setNote] = useState<string>('')
   const [submitting, setSubmitting] = useState(false)
   const [successMsg, setSuccessMsg] = useState('')
+  const [warningMsg, setWarningMsg] = useState('')
 
   useEffect(() => {
     const fetchAccounts = async () => {
@@ -83,6 +84,7 @@ export default function NewTransactionPage() {
     e.preventDefault()
     setError('')
     setSuccessMsg('')
+    setWarningMsg('')
 
     if (!accountId) return setError('Veuillez sélectionner un compte.')
     if (!amount || Number(amount) <= 0) return setError('Le montant doit être supérieur à zéro.')
@@ -99,11 +101,14 @@ export default function NewTransactionPage() {
         note: note || null,
       }
 
-      await axios.post(`${API_URL}/api/transactions`, payload)
+      const response = await axios.post(`${API_URL}/api/transactions`, payload)
 
       // update account balance locally
       setAccounts((prev) => prev.map((a) => (a.id === accountId ? { ...a, balance: previewBalance } : a)))
       setSuccessMsg('Transaction enregistrée avec succès.')
+      if (response.data?.limitExceededWarning && response.data?.warningMessage) {
+        setWarningMsg(response.data.warningMessage)
+      }
       setAmount('')
       setNote('')
     } catch (err: any) {
@@ -137,6 +142,22 @@ export default function NewTransactionPage() {
             {isLoading && <p className="dashboard-state">Chargement des comptes...</p>}
             {error && <p className="dashboard-error">{error}</p>}
             {successMsg && <p className="dashboard-success">{successMsg}</p>}
+            {warningMsg && (
+              <div
+                style={{
+                  marginTop: '12px',
+                  marginBottom: '16px',
+                  padding: '12px 14px',
+                  borderRadius: '12px',
+                  border: '1px solid #fdba74',
+                  background: '#fff7ed',
+                  color: '#9a3412',
+                  fontWeight: 600,
+                }}
+              >
+                {warningMsg}
+              </div>
+            )}
 
             {!isLoading && !error && (
               <section className="create-account-page">

@@ -7,7 +7,8 @@ type AccountCurrency = {
 type TransactionRow = {
   id: number
   transactionDate: string
-  category: string
+  category?: string
+  categoryName?: string
   note?: string | null
   amount: number
   type: string
@@ -29,6 +30,12 @@ export default function TransactionList({ transactions }: Props) {
     return <p className="empty-state">Aucune transaction enregistrée pour ce compte.</p>
   }
 
+  const formatAmount = (tx: TransactionRow) => {
+    const amountPrefix = String(tx.type).toUpperCase() === 'EXPENSE' ? '-' : '+'
+    const currencyLabel = tx.accountCurrency?.code || tx.currency?.code || tx.currencyCode || ''
+    return `${amountPrefix}${tx.amount.toLocaleString()}${currencyLabel}`
+  }
+
   return (
     <div className="transaction-table-container">
       <table className="transaction-table">
@@ -36,7 +43,6 @@ export default function TransactionList({ transactions }: Props) {
           <tr>
             <th>Date</th>
             <th>Compte</th>
-            <th>Devise</th>
             <th>Catégorie</th>
             <th>Note</th>
             <th>Montant</th>
@@ -47,12 +53,9 @@ export default function TransactionList({ transactions }: Props) {
             <tr key={tx.id} className={`tx-row ${String(tx.type).toLowerCase()}`}>
               <td>{new Date(tx.transactionDate).toLocaleDateString()}</td>
               <td className="tx-account">{tx.accountName || tx.account?.name || '-'}</td>
-              <td className="tx-currency">{tx.accountCurrency?.code || tx.currency?.code || tx.currencyCode || '-'}</td>
-              <td><span className="badge-category">{tx.category}</span></td>
+              <td><span className="badge-category">{tx.categoryName || tx.category || '-'}</span></td>
               <td className="tx-note">{tx.note || '-'}</td>
-              <td className="tx-amount">
-                {String(tx.type).toUpperCase() === 'EXPENSE' ? '-' : '+'} {tx.amount.toLocaleString()}
-              </td>
+              <td className="tx-amount">{formatAmount(tx)}</td>
             </tr>
           ))}
         </tbody>
