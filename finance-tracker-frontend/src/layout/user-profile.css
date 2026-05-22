@@ -1,0 +1,96 @@
+.user-profile {
+  padding: 1.25rem;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  background-color: #f9fafb;
+  transition: all 0.3s ease;
+}
+
+.user-profile.collapsed {
+  padding: 0.75rem;
+  justify-content: center;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4f8ef7 0%, #34d399 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+  font-size: 1.5rem;
+}
+
+.user-details {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.user-name {
+  margin: 0;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: #1f2937;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-status {
+  margin: 0.125rem 0 0 0;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.btn-logout {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  background-color: white;
+  color: #ef4444;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.btn-logout:hover {
+  background-color: #fee2e2;
+  border-color: #fecaca;
+}
+
+.btn-logout:active {
+  background-color: #fecaca;
+}
+
+.btn-logout i {
+  font-size: 1rem;
+}
+
+.user-profile.collapsed .btn-logout {
+  padding: 0.5rem;
+}
+
+.user-profile.collapsed .btn-logout span {
+  display: none;
+}

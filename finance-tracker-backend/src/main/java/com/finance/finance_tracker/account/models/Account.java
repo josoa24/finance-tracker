@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
+import com.finance.finance_tracker.auth.models.User;
 
 @Entity
 @Table(name = "accounts")
@@ -41,6 +42,10 @@ public class Account {
     @JoinColumn(name = "currency_id", nullable = false)
     private Currency currency;
 
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private User owner;
+
     public Currency getCurrency() {
         return currency;
     }
@@ -48,6 +53,9 @@ public class Account {
     public void setCurrency(Currency currency) {
         this.currency = currency;
     }
+
+    public User getOwner() { return owner; }
+    public void setOwner(User owner) { this.owner = owner; }
 
     public Account() {
     }
