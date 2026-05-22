@@ -1,6 +1,8 @@
 package com.finance.finance_tracker.account.models;
 
-import com.finance.finance_tracker.account.repository.AccountType;
+import com.finance.finance_tracker.account.repositories.AccountType;
+import com.finance.finance_tracker.transaction.models.Transaction; // <-- 1. AJOUT DE L'IMPORT
+
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,8 +34,8 @@ public class Account {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @Transient
-    private List<Object> transactions = new ArrayList<>();
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Transaction> transactions = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "currency_id", nullable = false)
@@ -50,57 +52,34 @@ public class Account {
     public Account() {
     }
 
-    public Account(String name, AccountType type, Double balance) {
+    public Account(String name, AccountType type, Double balance, Currency currency) {
         this.name = name;
         this.type = type;
         this.balance = balance;
+        this.currency = currency;
     }
 
     public boolean hasTransactions() {
         return this.transactions != null && !this.transactions.isEmpty();
     }
 
-    public Long getId() {
-        return id;
+    public List<Transaction> getTransactions() {
+        return transactions;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public AccountType getType() {
-        return type;
-    }
-
-    public void setType(AccountType type) {
-        this.type = type;
-    }
-
-    public Double getBalance() {
-        return balance;
-    }
-
-    public void setBalance(Double balance) {
-        this.balance = balance;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public AccountType getType() { return type; }
+    public void setType(AccountType type) { this.type = type; }
+    public Double getBalance() { return balance; }
+    public void setBalance(Double balance) { this.balance = balance; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public boolean isActive() { return active; }
+    public void setActive(boolean active) { this.active = active; }
 }

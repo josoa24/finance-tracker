@@ -2,7 +2,7 @@ import axios from 'axios'
 import { useEffect, useMemo, useState } from 'react'
 import { API_URL } from '../../../url'
 import AccountCard from '../components/AccountCard'
-import Sidebar from '../../../components/Sidebar'
+import Sidebar from '../../../layout/Sidebar'
 import { navItems } from '../../../config/navigationItems'
 import './AccountsDashboardPage.css'
 import type { Account } from '../types'
@@ -90,7 +90,7 @@ export default function AccountsDashboardPage() {
               <button
                 type="button"
                 className="btn btn-secondary"
-                onClick={() => (window.location.href = '/dashboard/transfer')}
+                onClick={() => (window.location.href = '/transactions/new')}
               >
                 <i className="bx bx-transfer" />
                 Virement rapide
@@ -145,9 +145,7 @@ export default function AccountsDashboardPage() {
               </div>
             </section>
 
-            {/* Category breakdown + accounts grid */}
             <div className="content-columns">
-              {/* Accounts grid */}
               <section className="accounts-section">
                 <div className="section-header">
                   <h2><i className="bx bx-wallet" /> Mes comptes</h2>
@@ -228,7 +226,7 @@ export default function AccountsDashboardPage() {
                   <div className="section-header">
                     <h2><i className="bx bx-zap" /> Actions rapides</h2>
                   </div>
-                  <a href="/dashboard/transfer" className="quick-action-btn">
+                  <a href="/transactions/new" className="quick-action-btn">
                     <i className="bx bx-transfer" />
                     <span>Effectuer un virement</span>
                     <i className="bx bx-chevron-right arrow" />

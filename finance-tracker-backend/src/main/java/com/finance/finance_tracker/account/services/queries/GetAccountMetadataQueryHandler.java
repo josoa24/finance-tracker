@@ -1,9 +1,9 @@
 package com.finance.finance_tracker.account.services.queries;
 
-import com.finance.finance_tracker.account.dto.AccountMetadataDTO;
-import com.finance.finance_tracker.account.dto.CurrencyDTO;
-import com.finance.finance_tracker.account.repository.AccountType;
-import com.finance.finance_tracker.account.repository.CurrencyRepository; 
+import com.finance.finance_tracker.account.dtos.AccountMetadataDTO;
+import com.finance.finance_tracker.account.dtos.CurrencyDTO;
+import com.finance.finance_tracker.account.repositories.AccountType;
+import com.finance.finance_tracker.account.repositories.CurrencyRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

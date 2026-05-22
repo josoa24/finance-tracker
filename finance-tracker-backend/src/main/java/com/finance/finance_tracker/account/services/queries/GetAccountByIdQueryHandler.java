@@ -1,8 +1,8 @@
 package com.finance.finance_tracker.account.services.queries;
 
-import com.finance.finance_tracker.account.dto.AccountDTO;
+import com.finance.finance_tracker.account.dtos.AccountDTO;
 import com.finance.finance_tracker.account.models.Account;
-import com.finance.finance_tracker.account.repository.AccountRepository;
+import com.finance.finance_tracker.account.repositories.AccountRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

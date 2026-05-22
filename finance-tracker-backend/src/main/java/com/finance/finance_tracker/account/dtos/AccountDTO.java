@@ -1,7 +1,7 @@
-package com.finance.finance_tracker.account.dto;
+package com.finance.finance_tracker.account.dtos;
 
 import com.finance.finance_tracker.account.models.Account;
-import com.finance.finance_tracker.account.repository.AccountType;
+import com.finance.finance_tracker.account.repositories.AccountType;
 import java.time.LocalDateTime;
 
 public record AccountDTO(

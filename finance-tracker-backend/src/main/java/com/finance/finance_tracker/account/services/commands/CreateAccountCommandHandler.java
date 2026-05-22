@@ -2,8 +2,8 @@ package com.finance.finance_tracker.account.services.commands;
 
 import com.finance.finance_tracker.account.models.Account;
 import com.finance.finance_tracker.account.models.Currency;
-import com.finance.finance_tracker.account.repository.AccountRepository;
-import com.finance.finance_tracker.account.repository.CurrencyRepository;
+import com.finance.finance_tracker.account.repositories.AccountRepository;
+import com.finance.finance_tracker.account.repositories.CurrencyRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,8 +31,7 @@ public class CreateAccountCommandHandler {
         Currency currency = currencyRepository.findById(command.currencyId())
                 .orElseThrow(() -> new IllegalArgumentException("Currency not found: " + command.currencyId()));
 
-        Account account = new Account(command.name(), command.type(), command.initialBalance());
-        account.setCurrency(currency);
+        Account account = new Account(command.name(), command.type(), command.initialBalance(), currency);
 
         return accountRepository.save(account).getId();
     }

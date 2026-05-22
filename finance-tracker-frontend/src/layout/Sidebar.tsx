@@ -37,6 +37,10 @@ export default function Sidebar({ navItems, sidebarOpen, setSidebarOpen, activeP
       </nav>
 
       <div className="sidebar-footer">
+        <a href="/transactions/new" className="nav-item">
+          <i className="bx bx-transfer" />
+          {sidebarOpen && <span>Faire transaction</span>}
+        </a>
         <a href="/dashboard/create" className="nav-item new-account-link">
           <i className="bx bx-plus-circle" />
           {sidebarOpen && <span>Nouveau compte</span>}
