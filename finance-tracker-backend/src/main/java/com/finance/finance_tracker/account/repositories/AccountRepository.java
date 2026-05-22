@@ -1,4 +1,4 @@
-package com.finance.finance_tracker.account.repository;
+package com.finance.finance_tracker.account.repositories;
 
 import com.finance.finance_tracker.account.models.Account;
 import org.springframework.data.jpa.repository.JpaRepository;

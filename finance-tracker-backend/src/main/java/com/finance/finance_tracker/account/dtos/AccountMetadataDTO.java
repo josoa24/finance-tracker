@@ -1,4 +1,4 @@
-package com.finance.finance_tracker.account.dto;
+package com.finance.finance_tracker.account.dtos;
 
 import java.util.List;
 

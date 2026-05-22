@@ -1,8 +1,9 @@
 package com.finance.finance_tracker.account.services.commands;
 
 import com.finance.finance_tracker.account.models.Account;
-import com.finance.finance_tracker.account.repository.AccountRepository;
-import com.finance.finance_tracker.account.repository.AccountType;
+import com.finance.finance_tracker.account.repositories.AccountRepository;
+import com.finance.finance_tracker.account.repositories.AccountType;
+import com.finance.finance_tracker.transaction.models.Transaction;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -11,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Optional;
+import com.finance.finance_tracker.account.models.Currency;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -24,14 +26,14 @@ class DeleteAccountCommandHandlerTest {
     @InjectMocks
     private DeleteAccountCommandHandler deleteAccountCommandHandler;
 
-    /**
-     * SCÉNARIO NOMINAL (Happy Path)
-     * Vérifie qu'un compte sans transactions est correctement désactivé (Soft Delete).
-     */
     @Test
     void should_delete_account_logically_when_it_has_no_transactions() {
         Long accountId = 1L;
-        Account fakeAccount = new Account("Compte Épargne", AccountType.SAVINGS, 1000.0);
+        Currency currency = new Currency();
+        currency.setId(1L);
+        currency.setCode("EUR");
+        currency.setSymbol("€");
+        Account fakeAccount = new Account("Compte Épargne", AccountType.SAVINGS, Double.valueOf(1000.0), currency);
         fakeAccount.setId(accountId);
         assertTrue(fakeAccount.isActive(), "Le compte doit être actif au départ.");
 
@@ -44,23 +46,18 @@ class DeleteAccountCommandHandlerTest {
         verify(accountRepository, never()).delete(any());
     }
 
-    /**
-     * CAS LIMITE (Edge Case - Règle métier stricte)
-     * Vérifie qu'on lève une exception et qu'on bloque la suppression si le compte a des transactions.
-     */
     @Test
     void should_throw_exception_and_block_deletion_when_account_has_existing_transactions() {
+        
         Long accountId = 2L;
-        Account fakeAccount = new Account("Compte Courant", AccountType.CHECKING, 500.0);
+        Currency currency = new Currency();
+        currency.setId(1L);
+        currency.setCode("EUR");
+        currency.setSymbol("€");
+        Account fakeAccount = new Account("Compte Courant", AccountType.CHECKING, Double.valueOf(500.0), currency);
         fakeAccount.setId(accountId);
         
-        try {
-            java.lang.reflect.Field transactionsField = Account.class.getDeclaredField("transactions");
-            transactionsField.setAccessible(true);
-            transactionsField.set(fakeAccount, List.of(new Object())); 
-        } catch (Exception e) {
-            fail("Échec de la configuration du mock des transactions : " + e.getMessage());
-        }
+        fakeAccount.setTransactions(List.of(new Transaction())); 
 
         when(accountRepository.findById(accountId)).thenReturn(Optional.of(fakeAccount));
 
@@ -74,14 +71,14 @@ class DeleteAccountCommandHandlerTest {
         verify(accountRepository, never()).delete(any());
     }
 
-    /**
-     * CAS LIMITE (Edge Case)
-     * Vérifie qu'on lève une erreur si l'utilisateur essaie de supprimer un compte déjà désactivé.
-     */
     @Test
     void should_throw_exception_when_account_is_already_deleted_logically() {
         Long accountId = 3L;
-        Account fakeAccount = new Account("Ancien Compte", AccountType.CASH, 0.0);
+        Currency currency = new Currency();
+        currency.setId(1L);
+        currency.setCode("EUR");
+        currency.setSymbol("€");
+        Account fakeAccount = new Account("Ancien Compte", AccountType.CASH, Double.valueOf(0.0), currency);
         fakeAccount.setId(accountId);
         fakeAccount.setActive(false); 
 
@@ -94,11 +91,7 @@ class DeleteAccountCommandHandlerTest {
         assertEquals("Ce compte a déjà été supprimé.", exception.getMessage());
         verify(accountRepository, never()).save(any());
     }
-
-    /**
-     * CAS LIMITE (Edge Case)
-     * Vérifie qu'on lève une exception descriptive si l'ID du compte n'existe pas en base de données.
-     */
+    
     @Test
     void should_throw_exception_when_account_does_not_exist() {
         Long nonExistentId = 99L;
