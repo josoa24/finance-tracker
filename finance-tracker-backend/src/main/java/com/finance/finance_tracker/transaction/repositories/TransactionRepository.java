@@ -22,4 +22,26 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
             @Param("categoryId") Long categoryId,
             @Param("type") TransactionType type,
             @Param("startOfMonth") LocalDateTime startOfMonth);
+
+    @Query("SELECT SUM(t.amount) FROM Transaction t " +
+            "WHERE t.account.id = :accountId " +
+            "AND t.type = :type " +
+            "AND t.transactionDate >= :start " +
+            "AND t.transactionDate < :end")
+    Double sumAmountByAccountAndTypeBetween(
+            @Param("accountId") Long accountId,
+            @Param("type") TransactionType type,
+            @Param("start") LocalDateTime start,
+            @Param("end") LocalDateTime end);
+
+    @Query("SELECT t.category.id, t.category.name, t.category.monthlyLimit, SUM(t.amount) " +
+            "FROM Transaction t " +
+            "WHERE t.account.id = :accountId " +
+            "AND t.transactionDate >= :start " +
+            "AND t.transactionDate < :end " +
+            "GROUP BY t.category.id, t.category.name, t.category.monthlyLimit")
+    List<Object[]> sumByCategoryForAccountBetween(
+            @Param("accountId") Long accountId,
+            @Param("start") LocalDateTime start,
+            @Param("end") LocalDateTime end);
 }

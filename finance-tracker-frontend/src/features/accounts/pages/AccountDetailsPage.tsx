@@ -10,6 +10,13 @@ function AccountDetailsPage({ id }: { id: number }) {
   const [error, setError] = useState('')
   const [deleteError, setDeleteError] = useState('')
   const [isDeleting, setIsDeleting] = useState(false)
+  const [month, setMonth] = useState(() => {
+    const now = new Date()
+    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
+  })
+  const [summary, setSummary] = useState<any | null>(null)
+  const [loadingSummary, setLoadingSummary] = useState(false)
+  const [summaryError, setSummaryError] = useState('')
 
   useEffect(() => {
     let mounted = true
@@ -100,6 +107,64 @@ function AccountDetailsPage({ id }: { id: number }) {
         <section className="transactions-placeholder">
           <h2>Historique des transactions</h2>
           <p>Liste des transactions (module 2)</p>
+        </section>
+
+        <section className="monthly-summary">
+          <h2>Récapitulatif mensuel</h2>
+          <label>
+            Choisir mois
+            <input type="month" value={month} onChange={(e) => setMonth(e.target.value)} />
+          </label>
+          <div style={{ marginTop: 12 }}>
+            <button
+              className="primary-button"
+              onClick={async () => {
+                setSummaryError('')
+                setLoadingSummary(true)
+                try {
+                  const [y, m] = month.split('-')
+                  const res = await axios.get(`${API_URL}/api/transactions/account/${id}/summary/${Number(y)}/${Number(m)}`)
+                  setSummary(res.data)
+                } catch (err: any) {
+                  setSummaryError('Impossible de charger le résumé.')
+                } finally {
+                  setLoadingSummary(false)
+                }
+              }}
+            >
+              Charger
+            </button>
+          </div>
+
+          {loadingSummary && <p>Chargement du résumé...</p>}
+          {summaryError && <p className="dashboard-error">{summaryError}</p>}
+
+          {summary && (
+            <div style={{ marginTop: 12 }}>
+              <p><strong>Total revenus:</strong> {summary.totalIncome?.toLocaleString() ?? 0}</p>
+              <p><strong>Total dépenses:</strong> {summary.totalExpenses?.toLocaleString() ?? 0}</p>
+              <p><strong>Net:</strong> {summary.net?.toLocaleString() ?? 0}</p>
+
+              <h3>Dépenses par catégorie</h3>
+              {summary.categories.length === 0 ? (
+                <p>Aucune dépense ce mois.</p>
+              ) : (
+                <ul style={{ listStyle: 'none', padding: 0 }}>
+                  {summary.categories.map((c: any) => (
+                    <li key={c.categoryId} style={{ marginBottom: 12 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <strong>{c.categoryName}</strong>
+                        <span>{c.spent?.toLocaleString() ?? 0} / {c.monthlyLimit ?? '—'}</span>
+                      </div>
+                      <div style={{ height: 10, background: '#eee', borderRadius: 6, overflow: 'hidden', marginTop: 6 }}>
+                        <div style={{ width: `${c.progress ? Math.min(c.progress, 100) : 0}%`, height: '100%', background: c.progress && c.progress > 100 ? '#f87171' : '#60a5fa' }} />
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
         </section>
       </section>
     </main>

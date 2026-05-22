@@ -128,6 +128,7 @@ export default function NewTransactionPage() {
           setSidebarOpen={setSidebarOpen}
           activePage={activePage}
           setActivePage={setActivePage}
+          accountId={accountId ?? null}
         />
 
         <div className="main-wrapper">

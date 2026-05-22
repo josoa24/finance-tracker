@@ -7,9 +7,10 @@ interface Props {
   setSidebarOpen: (open: boolean) => void
   activePage: string
   setActivePage: (key: string) => void
+  accountId?: number | null
 }
 
-export default function Sidebar({ navItems, sidebarOpen, setSidebarOpen, activePage, setActivePage }: Props) {
+export default function Sidebar({ navItems, sidebarOpen, setSidebarOpen, activePage, setActivePage, accountId }: Props) {
   return (
     <aside className={`sidebar ${sidebarOpen ? 'open' : 'collapsed'}`}>
       <div className="sidebar-header">
@@ -23,17 +24,20 @@ export default function Sidebar({ navItems, sidebarOpen, setSidebarOpen, activeP
       </div>
 
       <nav className="sidebar-nav">
-        {navItems.map((item) => (
-          <a
-            key={item.key}
-            href={item.href}
-            className={`nav-item ${activePage === item.key ? 'active' : ''}`}
-            onClick={() => setActivePage(item.key)}
-          >
-            <i className={`bx ${item.icon}`} />
-            {sidebarOpen && <span>{item.label}</span>}
-          </a>
-        ))}
+        {navItems.map((item) => {
+          const href = item.key === 'analytics' && accountId ? `/accounts/${accountId}` : item.href
+          return (
+            <a
+              key={item.key}
+              href={href}
+              className={`nav-item ${activePage === item.key ? 'active' : ''}`}
+              onClick={() => setActivePage(item.key)}
+            >
+              <i className={`bx ${item.icon}`} />
+              {sidebarOpen && <span>{item.label}</span>}
+            </a>
+          )
+        })}
       </nav>
 
       <div className="sidebar-footer">

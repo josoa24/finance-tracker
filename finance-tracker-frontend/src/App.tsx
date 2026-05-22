@@ -1,4 +1,3 @@
-import UsersList from './layout/UsersList'
 import AccountsDashboardPage from './features/accounts/pages/AccountsDashboardPage'
 import CreateAccountPage from './features/accounts/pages/CreateAccountPage'
 import TransferMoneyPage from './features/accounts/pages/TransferMoneyPage'
@@ -8,6 +7,7 @@ import AccountDetailsPage from './features/accounts/pages/AccountDetailsPage'
 import AccountsListPage from './features/accounts/pages/AccountsListPage'
 import PresentationPage from './features/presentation/pages/PresentationPage'
 import CategoryLimitsPage from './features/settings/pages/CategoryLimitsPage'
+import AnalyticsPage from './features/analytics/pages/AnalyticsPage'
 
 function App() {
   const currentPath = window.location.pathname
@@ -24,9 +24,10 @@ function App() {
       {currentPath === '/dashboard/transfer' && <TransferMoneyPage />}
       {currentPath === '/transactions/new' && <NewTransactionPage />}
       {currentPath === '/dashboard/history' && <TransactionHistoryPage />}
+      {currentPath === '/dashboard/analytics' && <AnalyticsPage />}
       {currentPath === '/settings' && <CategoryLimitsPage />}
       {accountId !== null && <AccountDetailsPage id={accountId} />}
-      {currentPath !== '/' && currentPath !== '/dashboard' && currentPath !== '/dashboard/create' && currentPath !== '/dashboard/transfer' && currentPath !== '/settings' && accountId === null && <UsersList />}
+      {currentPath !== '/' && currentPath !== '/dashboard' && currentPath !== '/dashboard/create' && currentPath !== '/dashboard/transfer' && currentPath !== '/settings' && accountId === null && null}
     </>
   )
 }
