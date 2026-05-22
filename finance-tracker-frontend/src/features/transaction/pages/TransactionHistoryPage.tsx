@@ -101,6 +101,7 @@ export default function TransactionHistoryPage() {
           setSidebarOpen={setSidebarOpen}
           activePage={activePage}
           setActivePage={setActivePage}
+          accountId={selectedAccount === 'all' ? null : (selectedAccount as number)}
         />
 
         <div className="main-wrapper">
