@@ -1,4 +1,5 @@
 import { type NavItem } from '../config/navigationItems'
+import UserProfile from './UserProfile'
 import './sidebar.css'
 
 interface Props {
@@ -54,6 +55,8 @@ export default function Sidebar({ navItems, sidebarOpen, setSidebarOpen, activeP
           {sidebarOpen && <span>Paramètres</span>}
         </a>
       </div>
+
+      <UserProfile sidebarOpen={sidebarOpen} />
     </aside>
   )
 }
