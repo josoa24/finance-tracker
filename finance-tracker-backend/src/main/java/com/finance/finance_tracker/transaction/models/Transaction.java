@@ -2,7 +2,6 @@ package com.finance.finance_tracker.transaction.models;
 
 import com.finance.finance_tracker.account.models.Account;
 import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
@@ -20,9 +19,9 @@ public class Transaction {
     @Enumerated(EnumType.STRING)
     private TransactionType type;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private TransactionCategory category;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
 
     @Column(name = "transaction_date", nullable = false)
     private LocalDateTime transactionDate;
@@ -36,7 +35,7 @@ public class Transaction {
 
     public Transaction() {}
 
-    public Transaction(Double amount, TransactionType type, TransactionCategory category, 
+    public Transaction(Double amount, TransactionType type, Category category, 
                        LocalDateTime transactionDate, String note, Account account) {
         this.amount = amount;
         this.type = type;
@@ -52,8 +51,8 @@ public class Transaction {
     public void setAmount(Double amount) { this.amount = amount; }
     public TransactionType getType() { return type; }
     public void setType(TransactionType type) { this.type = type; }
-    public TransactionCategory getCategory() { return category; }
-    public void setCategory(TransactionCategory category) { this.category = category; }
+    public Category getCategory() { return category; }
+    public void setCategory(Category category) { this.category = category; }
     public LocalDateTime getTransactionDate() { return transactionDate; }
     public void setTransactionDate(LocalDateTime transactionDate) { this.transactionDate = transactionDate; }
     public String getNote() { return note; }

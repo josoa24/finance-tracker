@@ -1,14 +1,13 @@
 package com.finance.finance_tracker.transaction.controllers;
 
 import com.finance.finance_tracker.transaction.dtos.TransactionDTO;
+import com.finance.finance_tracker.transaction.dtos.TransactionResponseDTO;
 import com.finance.finance_tracker.transaction.services.commands.LogTransactionCommand;
 import com.finance.finance_tracker.transaction.services.commands.LogTransactionCommandHandler;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/transactions")
@@ -32,17 +31,15 @@ public class TransactionCommandController {
                     dto.transactionDate(),
                     dto.note());
 
-            Long transactionId = commandHandler.handle(command);
+            TransactionResponseDTO response = commandHandler.handle(command);
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
-                    "message", "Transaction enregistrée avec succès !",
-                    "transactionId", transactionId));
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
 
         } catch (IllegalArgumentException | IllegalStateException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(java.util.Map.of("error", e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("error", "Une erreur interne est survenue."));
+                    .body(java.util.Map.of("error", "Une erreur interne est survenue."));
         }
     }
 }

@@ -45,7 +45,7 @@ export default function Sidebar({ navItems, sidebarOpen, setSidebarOpen, activeP
           <i className="bx bx-plus-circle" />
           {sidebarOpen && <span>Nouveau compte</span>}
         </a>
-        <a href="/settings" className="nav-item">
+        <a href="/settings" className={`nav-item ${activePage === 'settings' ? 'active' : ''}`} onClick={() => setActivePage('settings')}>
           <i className="bx bx-cog" />
           {sidebarOpen && <span>Paramètres</span>}
         </a>

@@ -7,6 +7,7 @@ import TransactionHistoryPage from './features/transaction/pages/TransactionHist
 import AccountDetailsPage from './features/accounts/pages/AccountDetailsPage'
 import AccountsListPage from './features/accounts/pages/AccountsListPage'
 import PresentationPage from './features/presentation/pages/PresentationPage'
+import CategoryLimitsPage from './features/settings/pages/CategoryLimitsPage'
 
 function App() {
   const currentPath = window.location.pathname
@@ -23,8 +24,9 @@ function App() {
       {currentPath === '/dashboard/transfer' && <TransferMoneyPage />}
       {currentPath === '/transactions/new' && <NewTransactionPage />}
       {currentPath === '/dashboard/history' && <TransactionHistoryPage />}
+      {currentPath === '/settings' && <CategoryLimitsPage />}
       {accountId !== null && <AccountDetailsPage id={accountId} />}
-      {currentPath !== '/' && currentPath !== '/dashboard' && currentPath !== '/dashboard/create' && currentPath !== '/dashboard/transfer' && accountId === null && <UsersList />}
+      {currentPath !== '/' && currentPath !== '/dashboard' && currentPath !== '/dashboard/create' && currentPath !== '/dashboard/transfer' && currentPath !== '/settings' && accountId === null && <UsersList />}
     </>
   )
 }

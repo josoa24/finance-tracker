@@ -2,8 +2,8 @@ package com.finance.finance_tracker.transaction.queries.controllers;
 
 import com.finance.finance_tracker.transaction.queries.dtos.TransactionReadView;
 import com.finance.finance_tracker.transaction.queries.services.TransactionQueryHandler;
-import com.finance.finance_tracker.transaction.models.TransactionCategory;
 import com.finance.finance_tracker.transaction.models.TransactionType;
+import com.finance.finance_tracker.transaction.repositories.CategoryRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -16,9 +16,11 @@ import java.util.stream.Collectors;
 public class TransactionQueryController {
 
     private final TransactionQueryHandler queryHandler;
+    private final CategoryRepository categoryRepository;
 
-    public TransactionQueryController(TransactionQueryHandler queryHandler) {
+    public TransactionQueryController(TransactionQueryHandler queryHandler, CategoryRepository categoryRepository) {
         this.queryHandler = queryHandler;
+        this.categoryRepository = categoryRepository;
     }
 
     @GetMapping("/account/{accountId}")
@@ -33,6 +35,6 @@ public class TransactionQueryController {
 
     @GetMapping("/categories")
     public ResponseEntity<List<String>> getCategories() {
-        return ResponseEntity.ok(Arrays.stream(TransactionCategory.values()).map(Enum::name).collect(Collectors.toList()));
+        return ResponseEntity.ok(categoryRepository.findAll().stream().map(category -> category.getName()).collect(Collectors.toList()));
     }
 }

@@ -25,7 +25,8 @@ public class TransactionQueryHandler {
                         t.getAmount(),
                         t.getTransactionDate(),
                         t.getNote(),
-                        t.getCategory(),
+                t.getCategory().getId(),
+                t.getCategory().getName(),
                         t.getType()
                 ))
                 .collect(Collectors.toList());
