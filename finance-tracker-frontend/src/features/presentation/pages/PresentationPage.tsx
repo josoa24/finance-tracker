@@ -188,7 +188,10 @@ export default function PresentationPage() {
         <span className="pp-logo">Finance Tracker</span>
         <button
           className="pp-skip"
-          onClick={() => (window.location.href = "/dashboard")}
+          onClick={() => {
+            try { localStorage.setItem('presentation_seen', 'true') } catch {}
+            window.location.href = "/dashboard"
+          }}
         >
           Passer →
         </button>
@@ -224,7 +227,17 @@ export default function PresentationPage() {
               ))}
             </div>
 
-            <button className="pp-btn-next" onClick={goNext}>
+            <button
+              className="pp-btn-next"
+              onClick={() => {
+                if (isLast) {
+                  try { localStorage.setItem('presentation_seen', 'true') } catch {}
+                  window.location.href = '/dashboard'
+                } else {
+                  goNext()
+                }
+              }}
+            >
               {isLast ? "Commencer" : "Suivant"}
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                 <path
